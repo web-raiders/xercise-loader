@@ -1,2 +1,2 @@
-# xercise-load
-node test engine for the xercise app
+# xercise-loader
+node test data loader for the xercise app
