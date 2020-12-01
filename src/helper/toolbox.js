@@ -21,6 +21,10 @@ const toolbox = {
   async hashPassword(password) {
     return bcrypt.hash(password, 10);
   },
+
+  async keyCheck(req, key) {
+    if (key !== env.KEY) return toolbox.errors(req.res, 'wrong key buddy', 403);
+  }
 };
 
 export default toolbox;

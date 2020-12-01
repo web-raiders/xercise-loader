@@ -3,7 +3,7 @@ import toolbox from '../helper/toolbox';
 
 const users = {
   async getUser(root, { key, email }, { req, models }) {
-    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
+    await toolbox.keyCheck(req, key);
     return models.User.findOne({ where: { email } });
   },
   async addUser(root, {
@@ -13,7 +13,7 @@ const users = {
     password,
     key,
   }, { req, models }) {
-    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
+    await toolbox.keyCheck(req, key);
     password = await toolbox.hashPassword(password);
     const user = await models.User.create({
       firstName,
