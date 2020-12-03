@@ -1,3 +1,5 @@
+import { workouts } from "../jobs";
+
 const services = {
   async add(model, data) {
     try {
@@ -56,8 +58,25 @@ const services = {
       throw new Error(error);
     }
   },
+  async workouts(model, associate) {
+    try {
+      const entities = await model.findAll({
+        where: {},
+        include: [
+          {
+            model: associate,
+            as: 'category',
+            required: false,
+            attributes: ['id', 'name']
+          }
+        ],
+      }).map((values) => values.get({ plain: true }));;
+      return entities;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
 };
 
 export default services;
-

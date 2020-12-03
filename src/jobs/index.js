@@ -42,8 +42,38 @@ const categories = {
     if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
     return db.all(models.Category);
   }
-}
+};
+
+const workouts = {
+  async addWorkout(root, {
+    category,
+    name,
+    difficulty,
+    key
+  }, {req, models }) {
+    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
+    const cat = await db.find(models.Category, { name: category });
+    if (!cat) toolbox.errors(req.res, 'this category does not exist', 400);
+    const data = await db.add(models.Workout, {
+      name,
+      categoryId: cat.id,
+      difficulty,
+    });
+    // console.log('🚨 Values: ', data);
+    data.category = cat;
+    return data;
+  },
+
+  async allWorkouts(root, { key }, { req, models}) {
+    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
+    const data = await db.workouts(models.Workout, models.Category);
+    // console.log('🚨 Values: ', data);
+    return data;
+  }
+};
+
 export {
   users,
   categories,
+  workouts,
 };

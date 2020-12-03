@@ -1,4 +1,8 @@
-import { users, categories } from '../jobs';
+import {
+  users,
+  categories,
+  workouts,
+} from '../jobs';
 
 const {
   addUser,
@@ -8,17 +12,23 @@ const {
   addCategory,
   allCategories,
 } = categories;
+const {
+  addWorkout,
+  allWorkouts,
+} = workouts;
 
 const resolvers = {
 
   Query: {
     getUser,
     allCategories,
+    allWorkouts,
   },
 
   Mutation: {
     addUser,
     addCategory,
+    addWorkout,
   },
 
 };

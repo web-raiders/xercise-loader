@@ -16,6 +16,13 @@ const typeDefs = gql`
     name: String!
   }
 
+  type Workout {
+    id: Int!
+    category: Category
+    name: String!
+    difficulty: String!
+  }
+
   type Query {
     getUser(
       email: String!
@@ -25,6 +32,10 @@ const typeDefs = gql`
     allCategories(
       key: String!
     ): [Category!]
+    
+    allWorkouts(
+      key: String!
+    ): [Workout!]
   }
 
   type Mutation {
@@ -40,6 +51,13 @@ const typeDefs = gql`
       name: String!
       key: String!
     ): Category
+
+    addWorkout(
+      name: String!
+      category: String!
+      difficulty: String!
+      key: String!
+    ): Workout
   }
 `;
 
