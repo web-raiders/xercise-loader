@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-express';
 const typeDefs = gql`
 
   type User {
-    id: String!,
+    id: String!
     email: String!
     password: String!
     firstName: String!
@@ -11,11 +11,20 @@ const typeDefs = gql`
     weightGoal: String!
   }
 
+  type Category {
+    id: Int!
+    name: String!
+  }
+
   type Query {
     getUser(
       email: String!
       key: String!
       ): User
+
+    allCategories(
+      key: String!
+    ): [Category!]
   }
 
   type Mutation {
@@ -26,6 +35,11 @@ const typeDefs = gql`
       lastName: String!
       key: String!
     ): User!
+
+    addCategory(
+      name: String!
+      key: String!
+    ): Category
   }
 `;
 
