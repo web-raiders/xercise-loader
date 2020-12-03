@@ -1,5 +1,3 @@
-import { workouts } from "../jobs";
-
 const services = {
   async add(model, data) {
     try {
@@ -58,7 +56,7 @@ const services = {
       throw new Error(error);
     }
   },
-  async workouts(model, associate) {
+  async allWorkouts(model, associate) {
     try {
       const entities = await model.findAll({
         where: {},

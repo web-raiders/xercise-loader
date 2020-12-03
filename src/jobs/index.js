@@ -4,7 +4,7 @@ import db from '../service';
 
 const users = {
   async getUser(root, { key, email }, { req, models }) {
-    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
+    await toolbox.keyCheck(req, key);
     return db.find(models.User, { email });
   },
   async addUser(root, {
@@ -14,7 +14,7 @@ const users = {
     password,
     key,
   }, { req, models }) {
-    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
+    await toolbox.keyCheck(req, key);
     password = await toolbox.hashPassword(password);
     const user = await db.add(models.User, {
       firstName,
@@ -31,15 +31,15 @@ const categories = {
     name,
     key
   }, { req, models }) {
-    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
+    await toolbox.keyCheck(req, key);
     const data = await db.add(models.Category, {
       name,
     });
     return data;
   },
 
-  async allCategories(root, { key }, {req, models }) {
-    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
+  async allCategories(root, { key }, { req, models }) {
+    await toolbox.keyCheck(req, key);
     return db.all(models.Category);
   }
 };
@@ -50,8 +50,8 @@ const workouts = {
     name,
     difficulty,
     key
-  }, {req, models }) {
-    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
+  }, { req, models }) {
+    await toolbox.keyCheck(req, key);
     const cat = await db.find(models.Category, { name: category });
     if (!cat) toolbox.errors(req.res, 'this category does not exist', 400);
     const data = await db.add(models.Workout, {
@@ -64,9 +64,9 @@ const workouts = {
     return data;
   },
 
-  async allWorkouts(root, { key }, { req, models}) {
-    if (key !== env.KEY) toolbox.errors(req.res, 'wrong key buddy', 403);
-    const data = await db.workouts(models.Workout, models.Category);
+  async allWorkouts(root, { key }, { req, models }) {
+    await toolbox.keyCheck(req, key);
+    const data = await db.allWorkouts(models.Workout, models.Category);
     // console.log('🚨 Values: ', data);
     return data;
   }
