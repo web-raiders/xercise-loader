@@ -72,8 +72,44 @@ const workouts = {
   }
 };
 
+const sessions = {
+  async addSession(root, {
+    userId,
+    workoutId,
+    numberOfSets,
+    repsPerSet,
+    status,
+    date,
+    key,
+  }, {req, models }) {
+    await toolbox.keyCheck(req, key);
+    const user = await db.find(models.User, { id: userId });
+    if (!user) return toolbox.errors(req.res, 'the user with this id does not exist', 404);
+    const workout = await db.find(models.Workout, { id: workoutId });
+    if (!workout) return toolbox.errors(req.res, 'workout with id does not exist', 404);
+    const data = await db.add(models.Session, {
+      userId,
+      workoutId,
+      numberOfSets,
+      repsPerSet,
+      status,
+      date,
+    });
+    data.user = user;
+    data.workout = workout;
+    return data;
+  },
+
+  async allSessions(root, { key }, { req, models }) {
+    await toolbox.keyCheck(req, key);
+    const data = await db.allSessions(models.Session, models.User, models.Workout);
+    return data;
+  }
+};
+
 export {
   users,
   categories,
   workouts,
+  sessions,
 };

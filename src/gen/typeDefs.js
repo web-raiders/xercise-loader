@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
+  scalar Date
 
   type User {
     id: String!
@@ -23,6 +24,17 @@ const typeDefs = gql`
     difficulty: String!
   }
 
+  type Session {
+    id: Int!
+    user: User
+    workout: Workout
+    numberOfSets: Int!
+    repsPerSet: Int!
+    status: String
+    date: Date!
+    weight: String!
+  }
+
   type Query {
     getUser(
       email: String!
@@ -36,6 +48,15 @@ const typeDefs = gql`
     allWorkouts(
       key: String!
     ): [Workout!]
+
+    allSessions(
+      key: String!
+    ):[Session!]
+
+    sessionByDate(
+      key: String!
+      day: Date
+    ): [Session]
   }
 
   type Mutation {
@@ -58,6 +79,16 @@ const typeDefs = gql`
       difficulty: String!
       key: String!
     ): Workout
+
+    addSession(
+      userId: String!
+      workoutId: Int!
+      numberOfSets: Int!
+      repsPerSet: Int!
+      status: String
+      date: Date!
+      key: String!
+    ): Session
   }
 `;
 

@@ -68,13 +68,36 @@ const services = {
             attributes: ['id', 'name']
           }
         ],
-      }).map((values) => values.get({ plain: true }));;
+      }).map((values) => values.get({ plain: true }));
       return entities;
     } catch (error) {
       throw new Error(error);
     }
   },
-
+  async allSessions(model, user, workout) {
+    try {
+      const entities = await model.findAll({
+        where: {},
+        include: [
+          {
+            model: user,
+            as: 'users',
+            required: false,
+            attributes: ['id', 'firstName', 'lastName', 'email']
+          },
+          {
+            model: workout,
+            as: 'workout',
+            required: false,
+            attributes: ['name', 'categoryId', 'difficulty']
+          },
+        ],
+      }).map((values) => values.get({ plain: true }));
+      return entities;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 };
 
 export default services;

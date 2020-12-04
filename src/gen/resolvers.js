@@ -1,7 +1,9 @@
+import { GraphQLDate } from 'graphql-iso-date';
 import {
   users,
   categories,
   workouts,
+  sessions,
 } from '../jobs';
 
 const {
@@ -16,9 +18,13 @@ const {
   addWorkout,
   allWorkouts,
 } = workouts;
+const {
+  addSession,
+} = sessions;
 
 const resolvers = {
 
+  Date: GraphQLDate,
   Query: {
     getUser,
     allCategories,
@@ -29,6 +35,7 @@ const resolvers = {
     addUser,
     addCategory,
     addWorkout,
+    addSession,
   },
 
 };
