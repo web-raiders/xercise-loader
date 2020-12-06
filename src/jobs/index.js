@@ -75,34 +75,70 @@ const workouts = {
 const sessions = {
   async addSession(root, {
     userId,
-    workoutId,
-    numberOfSets,
-    repsPerSet,
     status,
     date,
     key,
-  }, {req, models }) {
+  }, { req, models }) {
     await toolbox.keyCheck(req, key);
     const user = await db.find(models.User, { id: userId });
+    // console.log(user);
     if (!user) return toolbox.errors(req.res, 'the user with this id does not exist', 404);
-    const workout = await db.find(models.Workout, { id: workoutId });
-    if (!workout) return toolbox.errors(req.res, 'workout with id does not exist', 404);
     const data = await db.add(models.Session, {
       userId,
-      workoutId,
-      numberOfSets,
-      repsPerSet,
       status,
       date,
     });
     data.user = user;
-    data.workout = workout;
     return data;
   },
 
   async allSessions(root, { key }, { req, models }) {
     await toolbox.keyCheck(req, key);
-    const data = await db.allSessions(models.Session, models.User, models.Workout);
+    const data = await db.allSessions(models.Session, models.User);
+    return data;
+  }
+};
+
+const routines = {
+  async addRoutine(root, {
+    sessionId,
+    workoutId,
+    numberOfSets,
+    repsPerSet,
+    status,
+    weight,
+    key,
+  }, { req, models }) {
+    await toolbox.keyCheck(req, key);
+    const session = await db.find(models.Session, { id: sessionId });
+    if (!session) return toolbox.errors(req.res, 'the session with this id does not exist', 404);
+    const user = await db.find(models.User, { id: session.userId });
+    const workout = await db.find(models.Workout, { id: workoutId });
+    if (!workout) return toolbox.errors(req.res, 'workout with id does not exist', 404);
+    const data = await db.add(models.Routine, {
+      sessionId,
+      workoutId,
+      numberOfSets,
+      repsPerSet,
+      status,
+      weight,
+    });
+    data.session = session;
+    data.session.user = user;
+    data.workout = workout;
+    return data;
+  },
+
+  async routineBySession(root, { sessionId, key }, { req, models }) {
+    await toolbox.keyCheck(req, key);
+    const data = await db.RoutineBySession(
+      models.Routine,
+      models.Workout,
+      models.Category,
+      models.Session,
+      models.User,
+      sessionId
+    );
     return data;
   }
 };
@@ -112,4 +148,5 @@ export {
   categories,
   workouts,
   sessions,
+  routines
 };

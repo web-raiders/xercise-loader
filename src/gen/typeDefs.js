@@ -27,11 +27,17 @@ const typeDefs = gql`
   type Session {
     id: Int!
     user: User
+    status: String
+    date: Date!
+  }
+
+  type Routine {
+    id: Int!
+    session: Session
     workout: Workout
     numberOfSets: Int!
     repsPerSet: Int!
     status: String
-    date: Date!
     weight: String!
   }
 
@@ -53,10 +59,10 @@ const typeDefs = gql`
       key: String!
     ):[Session!]
 
-    sessionByDate(
+    routineBySession(
+      sessionId: Int!
       key: String!
-      day: Date
-    ): [Session]
+    ): [Routine]
   }
 
   type Mutation {
@@ -82,13 +88,20 @@ const typeDefs = gql`
 
     addSession(
       userId: String!
-      workoutId: Int!
-      numberOfSets: Int!
-      repsPerSet: Int!
-      status: String
+      status: String!
       date: Date!
       key: String!
     ): Session
+
+    addRoutine(
+      sessionId: Int!
+      workoutId: Int!
+      numberOfSets: Int!
+      repsPerSet: Int!
+      status: String!
+      weight: String!
+      key: String!
+    ): Routine
   }
 `;
 

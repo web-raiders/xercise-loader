@@ -16,24 +16,6 @@ module.exports = {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     },
-    workoutId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Workouts',
-        key: 'id'
-      },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
-    },
-    numberOfSets: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    repsPerSet: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
     status: {
       type: Sequelize.ENUM('pending', 'completed'),
       allowNull: false,
@@ -42,10 +24,6 @@ module.exports = {
     date: {
       allowNull: false,
       type: Sequelize.DATE
-    },
-    weight: {
-      type: Sequelize.STRING,
-      allowNull: true
     },
     createdAt: {
       allowNull: false,

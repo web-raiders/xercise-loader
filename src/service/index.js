@@ -4,6 +4,7 @@ const services = {
       const { dataValues: value } = await model.create(data);
       return value;
     } catch (error) {
+      console.log(error);
       throw new Error(error);
     }
   },
@@ -74,22 +75,56 @@ const services = {
       throw new Error(error);
     }
   },
-  async allSessions(model, user, workout) {
+  async allSessions(model, user) {
     try {
       const entities = await model.findAll({
         where: {},
         include: [
           {
             model: user,
-            as: 'users',
+            as: 'user',
             required: false,
             attributes: ['id', 'firstName', 'lastName', 'email']
-          },
+          }
+        ],
+      }).map((values) => values.get({ plain: true }));
+      return entities;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  async RoutineBySession(model, workout, category, session, user, sessionId) {
+    try {
+      const entities = await model.findAll({
+        where: { sessionId },
+        include: [
           {
             model: workout,
             as: 'workout',
             required: false,
-            attributes: ['name', 'categoryId', 'difficulty']
+            attributes: ['id', 'name', 'categoryId', 'difficulty'],
+            include: [
+              {
+                model: category,
+                as: 'category',
+                required: false,
+                attributes: ['id', 'name']
+              }
+            ],
+          },
+          {
+            model: session,
+            as: 'session',
+            required: false,
+            attributes: ['id', 'userId', 'status', 'date'],
+            include: [
+              {
+                model: user,
+                as: 'user',
+                required: false,
+                attributes: ['id', 'firstName', 'lastName', 'email']
+              }
+            ],
           },
         ],
       }).map((values) => values.get({ plain: true }));

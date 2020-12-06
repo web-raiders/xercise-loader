@@ -12,24 +12,6 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      workoutId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Workout',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      numberOfSets: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      repsPerSet: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       status: {
         type: DataTypes.ENUM('pending', 'completed'),
         allowNull: false,
@@ -39,17 +21,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.DATE
       },
-      weight: {
-        type: DataTypes.STRING,
-        allowNull: true
-      },
     },
     {}
   );
   Session.associate = (models) => {
     Session.belongsTo(models.User, {
-      as: 'users',
+      as: 'user',
       foreignKey: 'userId',
+    });
+    Session.hasMany(models.Routine, {
+      as: 'routines',
+      foreignKey: 'sessionId',
     });
   };
   return Session;

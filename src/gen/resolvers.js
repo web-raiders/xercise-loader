@@ -1,9 +1,10 @@
-import { GraphQLDate } from 'graphql-iso-date';
+import { GraphQLDateTime } from 'graphql-iso-date';
 import {
   users,
   categories,
   workouts,
   sessions,
+  routines,
 } from '../jobs';
 
 const {
@@ -20,15 +21,22 @@ const {
 } = workouts;
 const {
   addSession,
+  allSessions,
 } = sessions;
+const {
+  addRoutine,
+  routineBySession,
+} = routines;
 
 const resolvers = {
 
-  Date: GraphQLDate,
+  Date: GraphQLDateTime,
   Query: {
     getUser,
     allCategories,
     allWorkouts,
+    allSessions,
+    routineBySession,
   },
 
   Mutation: {
@@ -36,6 +44,7 @@ const resolvers = {
     addCategory,
     addWorkout,
     addSession,
+    addRoutine,
   },
 
 };

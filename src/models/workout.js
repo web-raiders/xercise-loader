@@ -29,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'category',
       foreignKey: 'categoryId',
     });
+    Workout.hasMany(models.Routine, {
+      as: 'routines',
+      foreignKey: 'workoutId',
+    });
   };
   return Workout;
 };
