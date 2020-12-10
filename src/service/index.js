@@ -6,7 +6,7 @@ const services = {
       const { dataValues: value } = await model.create(data);
       return value;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       throw new Error(error);
     }
   },
@@ -138,7 +138,6 @@ const services = {
 
   async getAnalyticsByRange(model, routine, workout, category, session, user, keys) {
     try {
-      console.log('keys: ', keys);
       const entities = await model.findAll({
         where: {
           createdAt: {
