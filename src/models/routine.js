@@ -51,6 +51,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'workout',
       foreignKey: 'workoutId',
     });
+    Routine.hasMany(models.Analytics, {
+      as: 'analytics',
+      foreignKey: 'routineId'
+    });
   };
   return Routine;
 };

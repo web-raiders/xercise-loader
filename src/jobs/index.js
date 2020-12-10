@@ -143,10 +143,51 @@ const routines = {
   }
 };
 
+const analytics = {
+  async addAnalytics(root, {
+    routineId,
+    setsCompleted,
+    repsBreakdown,
+    weightsBreakdown,
+    bodyWeight,
+    key,
+  }, { req, models }) {
+    await toolbox.keyCheck(req, key);
+    const routine = await db.find(models.Routine, { id: routineId });
+    if (repsBreakdown.length !== setsCompleted) return toolbox.errors(req.res, 'number of sets does not match reps breakdown', 400);
+    if (weightsBreakdown.length !== setsCompleted) return toolbox.errors(req.res, 'number of sets does not match weight breakdown', 400);
+    if (!routine) return toolbox.errors(req.res, 'the routine with this id does not exist', 404);
+    const data = await db.add(models.Analytics, {
+      routineId,
+      setsCompleted,
+      repsBreakdown,
+      weightsBreakdown,
+      bodyWeight,
+    });
+    data.routine = routine;
+    return data;
+  },
+
+  async analyticsByRange(root, { from, to, key }, { req, models }) {
+    await toolbox.keyCheck(req, key);
+    const data = await db.getAnalyticsByRange(
+      models.Analytics,
+      models.Routine,
+      models.Workout,
+      models.Category,
+      models.Session,
+      models.User,
+      { from, to }
+    );
+    return data;
+  },
+};
+
 export {
   users,
   categories,
   workouts,
   sessions,
-  routines
+  routines,
+  analytics,
 };

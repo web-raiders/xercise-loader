@@ -6,7 +6,6 @@ const typeDefs = gql`
   type User {
     id: String!
     email: String!
-    password: String!
     firstName: String!
     lastName: String!
     weightGoal: String!
@@ -41,6 +40,15 @@ const typeDefs = gql`
     weight: String!
   }
 
+  type Analytics {
+    id: Int!
+    routine: Routine
+    setsCompleted: Int!
+    repsBreakdown: [Int!]
+    weightsBreakdown: [String!]
+    bodyWeight: String!
+  }
+
   type Query {
     getUser(
       email: String!
@@ -63,6 +71,12 @@ const typeDefs = gql`
       sessionId: Int!
       key: String!
     ): [Routine]
+
+    analyticsByRange(
+      from: Date!
+      to: Date!
+      key: String!
+    ): [Analytics]
   }
 
   type Mutation {
@@ -102,6 +116,15 @@ const typeDefs = gql`
       weight: String!
       key: String!
     ): Routine
+
+    addAnalytics(
+      routineId: Int!
+      setsCompleted: Int!
+      repsBreakdown: [Int]
+      weightsBreakdown: [String]
+      bodyWeight: String
+      key: String!
+    ): Analytics
   }
 `;
 

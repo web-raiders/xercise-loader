@@ -5,6 +5,7 @@ import {
   workouts,
   sessions,
   routines,
+  analytics,
 } from '../jobs';
 
 const {
@@ -27,6 +28,10 @@ const {
   addRoutine,
   routineBySession,
 } = routines;
+const {
+  addAnalytics,
+  analyticsByRange,
+} = analytics;
 
 const resolvers = {
 
@@ -37,6 +42,7 @@ const resolvers = {
     allWorkouts,
     allSessions,
     routineBySession,
+    analyticsByRange,
   },
 
   Mutation: {
@@ -45,6 +51,7 @@ const resolvers = {
     addWorkout,
     addSession,
     addRoutine,
+    addAnalytics,
   },
 
 };

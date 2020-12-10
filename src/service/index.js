@@ -1,3 +1,5 @@
+import { Op } from 'sequelize';
+
 const services = {
   async add(model, data) {
     try {
@@ -133,6 +135,60 @@ const services = {
       throw new Error(error);
     }
   },
+
+  async getAnalyticsByRange(model, routine, workout, category, session, user, keys) {
+    try {
+      console.log('keys: ', keys);
+      const entities = await model.findAll({
+        where: {
+          createdAt: {
+            [Op.between]: [keys.from, keys.to]
+          }
+        },
+        include: [
+          {
+            model: routine,
+            as: 'routine',
+            required: false,
+            attributes: ['id', 'numberOfSets', 'repsPerSet', 'status', 'weight'],
+            include: [
+              {
+                model: workout,
+                as: 'workout',
+                required: false,
+                attributes: ['id', 'name', 'categoryId', 'difficulty'],
+                include: [
+                  {
+                    model: category,
+                    as: 'category',
+                    required: false,
+                    attributes: ['id', 'name']
+                  }
+                ],
+              },
+              {
+                model: session,
+                as: 'session',
+                required: false,
+                attributes: ['id', 'userId', 'status', 'date'],
+                include: [
+                  {
+                    model: user,
+                    as: 'user',
+                    required: false,
+                    attributes: ['id', 'firstName', 'lastName', 'email']
+                  }
+                ],
+              },
+            ],
+          },
+        ],
+      }).map((values) => values.get({ plain: true }));
+      return entities;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 };
 
 export default services;
